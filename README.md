@@ -1,5 +1,6 @@
 # The Marché — Shopping Cart App
 
+[![CI](https://github.com/LivailleDev/TheMarche/actions/workflows/ci.yml/badge.svg)](https://github.com/LivailleDev/TheMarche/actions/workflows/ci.yml)
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-online-brightgreen)](https://themarcheapp.netlify.app)
 ![React Native](https://img.shields.io/badge/React%20Native-Expo-000020)
 ![React](https://img.shields.io/badge/React-18-61DAFB)
