@@ -5,9 +5,12 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 export default function CardItem({ data, addAmount, removeAmount }) {
   return (
     <View style={styles.container}>
-      <View>
-        <Text style={styles.title}>{data.name}</Text>
-        <Text style={styles.price}>€ {data.price.toFixed(2)}</Text>
+      <View style={styles.info}>
+        <Text style={styles.icon}>{data.icon}</Text>
+        <View>
+          <Text style={styles.title}>{data.name}</Text>
+          <Text style={styles.price}>€ {data.price.toFixed(2)}</Text>
+        </View>
       </View>
 
       <View style={styles.amountContainer}>
@@ -29,13 +32,21 @@ const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
     borderColor: '#E3E3E3',
-    borderRadius: 8,
+    borderRadius: 10,
     marginBottom: 12,
     padding: 12,
     backgroundColor: '#FFFFFF',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  info: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    fontSize: 28,
+    marginRight: 12,
   },
   title: {
     fontWeight: 'bold',

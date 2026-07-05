@@ -6,6 +6,7 @@ import CartProvider from './src/contexts/CartContext';
 import Login from './src/pages/Login/index';
 import Sale from './src/pages/Sale/index';
 import Cart from './src/pages/Cart/index';
+import Checkout from './src/pages/Checkout/index';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,7 @@ export default function App() {
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="Shop" component={Sale} options={{ title: 'The Marché' }} />
           <Stack.Screen name="Cart" component={Cart} options={{ title: 'Your Cart' }} />
+          <Stack.Screen name="Checkout" component={Checkout} options={{ title: 'Checkout' }} />
         </Stack.Navigator>
       </NavigationContainer>
     </CartProvider>

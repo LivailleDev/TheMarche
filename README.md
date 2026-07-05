@@ -14,11 +14,13 @@ with cart state shared across screens via React Context.
 
 ## Features
 
-- Product list with **add to cart**
-- Cart with **+ / − quantity** controls per item and a **live total**
-- Cart **badge** showing the number of items
+- Product catalog with **search** and **category filters** (Produce, Drinks, Bakery, Household)
+- **Add to cart** with per-item **+ / − quantity** controls and a **live total**
+- **Checkout** flow: order summary → confirmation ("Order placed!")
+- **Cart persistence** across reloads via AsyncStorage
+- Cart **badge** with the item count; product icons for a store-like feel
 - Shared cart state via **React Context** (single source of truth)
-- Screens: Login → Shop → Cart (React Navigation stack)
+- Screens: Login → Shop → Cart → Checkout (React Navigation stack)
 
 ## Tech
 

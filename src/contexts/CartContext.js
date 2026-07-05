@@ -1,10 +1,38 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useRef, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const CartContext = createContext({});
+
+const STORAGE_KEY = '@themarche:cart';
 
 function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
   const [checkout, setCheckout] = useState(0);
+  const loaded = useRef(false);
+
+  // Restore the cart from device storage on startup.
+  useEffect(() => {
+    (async () => {
+      try {
+        const json = await AsyncStorage.getItem(STORAGE_KEY);
+        if (json) {
+          const items = JSON.parse(json);
+          setCart(items);
+          recalculate(items);
+        }
+      } catch {
+        /* ignore storage errors */
+      }
+      loaded.current = true;
+    })();
+  }, []);
+
+  // Persist the cart whenever it changes (after the initial restore).
+  useEffect(() => {
+    if (loaded.current) {
+      AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(cart)).catch(() => {});
+    }
+  }, [cart]);
 
   function recalculate(items) {
     setCheckout(items.reduce((total, item) => total + item.checkout, 0));
@@ -13,7 +41,6 @@ function CartProvider({ children }) {
   function addItemCart(newItem) {
     setCart((current) => {
       const exists = current.some((item) => item.id === newItem.id);
-      // Immutable update so React re-renders reliably.
       const updated = exists
         ? current.map((item) =>
             item.id === newItem.id
@@ -30,7 +57,6 @@ function CartProvider({ children }) {
     setCart((current) => {
       const item = current.find((it) => it.id === product.id);
       if (!item) return current;
-
       const updated =
         item.amount > 1
           ? current.map((it) =>
@@ -44,8 +70,13 @@ function CartProvider({ children }) {
     });
   }
 
+  function clearCart() {
+    setCart([]);
+    setCheckout(0);
+  }
+
   return (
-    <CartContext.Provider value={{ cart, addItemCart, removeItemCart, checkout }}>
+    <CartContext.Provider value={{ cart, addItemCart, removeItemCart, clearCart, checkout }}>
       {children}
     </CartContext.Provider>
   );

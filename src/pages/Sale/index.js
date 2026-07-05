@@ -1,26 +1,36 @@
-import { useState, useContext } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
+import { useContext, useMemo, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  FlatList,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+} from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 import Product from '../../components/Product';
 import { useNavigation } from '@react-navigation/native';
 import { CartContext } from '../../contexts/CartContext';
-
-const CATALOG = [
-  { id: '1', name: 'Tomatoes', price: 1.9 },
-  { id: '2', name: 'Water', price: 0.5 },
-  { id: '3', name: 'Apples', price: 1.1 },
-  { id: '4', name: 'Oranges', price: 0.4 },
-  { id: '5', name: 'Toilet Paper', price: 2.05 },
-  { id: '6', name: 'Milk', price: 0.99 },
-  { id: '7', name: 'Bread', price: 1.25 },
-  { id: '8', name: 'Coffee', price: 3.4 },
-];
+import { CATALOG, CATEGORIES } from '../../data/catalog';
 
 export default function Sale() {
   const { cart, addItemCart } = useContext(CartContext);
   const navigation = useNavigation();
-  const [products] = useState(CATALOG);
+  const [query, setQuery] = useState('');
+  const [category, setCategory] = useState('All');
+
+  const products = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return CATALOG.filter(
+      (item) =>
+        (category === 'All' || item.category === category) && item.name.toLowerCase().includes(q)
+    );
+  }, [query, category]);
+
+  const itemCount = cart.reduce((total, item) => total + item.amount, 0);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -32,20 +42,47 @@ export default function Sale() {
           onPress={() => navigation.navigate('Cart')}
           accessibilityLabel="Open cart"
         >
-          {cart.length >= 1 && (
+          {itemCount >= 1 && (
             <View style={styles.dot}>
-              <Text style={styles.dotText}>{cart.length}</Text>
+              <Text style={styles.dotText}>{itemCount}</Text>
             </View>
           )}
           <Feather name="shopping-cart" size={28} color="#3B7A22" />
         </TouchableOpacity>
       </View>
 
+      <TextInput
+        style={styles.search}
+        placeholder="Search products…"
+        value={query}
+        onChangeText={setQuery}
+        autoCapitalize="none"
+      />
+
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.chipsRow}
+        contentContainerStyle={styles.chipsContent}
+      >
+        {CATEGORIES.map((c) => (
+          <TouchableOpacity
+            key={c}
+            onPress={() => setCategory(c)}
+            style={[styles.chip, category === c && styles.chipActive]}
+          >
+            <Text style={[styles.chipText, category === c && styles.chipTextActive]}>{c}</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+
       <FlatList
         data={products}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.list}
         renderItem={({ item }) => <Product data={item} addToCart={() => addItemCart(item)} />}
+        ListEmptyComponent={<Text style={styles.empty}>No products found.</Text>}
       />
     </SafeAreaView>
   );
@@ -62,7 +99,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 20,
-    marginBottom: 20,
+    marginBottom: 14,
   },
   title: {
     fontSize: 24,
@@ -88,5 +125,47 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#fff',
     fontWeight: 'bold',
+  },
+  search: {
+    height: 44,
+    borderWidth: 1,
+    borderColor: '#DADADA',
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    backgroundColor: '#fff',
+    marginBottom: 12,
+  },
+  chipsRow: {
+    flexGrow: 0,
+    marginBottom: 12,
+  },
+  chipsContent: {
+    gap: 8,
+    paddingRight: 8,
+  },
+  chip: {
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderRadius: 20,
+    backgroundColor: '#ECECEC',
+  },
+  chipActive: {
+    backgroundColor: '#70B529',
+  },
+  chipText: {
+    color: '#444',
+    fontWeight: '600',
+    fontSize: 13,
+  },
+  chipTextActive: {
+    color: '#fff',
+  },
+  list: {
+    paddingBottom: 20,
+  },
+  empty: {
+    textAlign: 'center',
+    color: '#888',
+    marginTop: 40,
   },
 });

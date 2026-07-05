@@ -1,10 +1,10 @@
 import { useContext } from 'react';
-import { View, StyleSheet, FlatList, Text } from 'react-native';
+import { View, StyleSheet, FlatList, Text, TouchableOpacity } from 'react-native';
 
 import { CartContext } from '../../contexts/CartContext';
 import CardItem from '../../components/CardItem';
 
-export default function Cart() {
+export default function Cart({ navigation }) {
   const { cart, addItemCart, removeItemCart, checkout } = useContext(CartContext);
 
   return (
@@ -13,6 +13,7 @@ export default function Cart() {
         data={cart}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => String(item.id)}
+        contentContainerStyle={styles.list}
         ListEmptyComponent={() => <Text style={styles.empty}>Your cart is empty.</Text>}
         renderItem={({ item }) => (
           <CardItem
@@ -21,12 +22,16 @@ export default function Cart() {
             removeAmount={() => removeItemCart(item)}
           />
         )}
-        ListFooterComponent={() =>
-          cart.length > 0 ? (
-            <Text style={styles.checkout}>Total: € {checkout.toFixed(2)}</Text>
-          ) : null
-        }
       />
+
+      {cart.length > 0 && (
+        <View style={styles.footer}>
+          <Text style={styles.total}>Total: € {checkout.toFixed(2)}</Text>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Checkout')}>
+            <Text style={styles.buttonText}>Checkout</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }
@@ -38,17 +43,35 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingTop: 14,
   },
+  list: {
+    paddingBottom: 12,
+  },
   empty: {
     fontSize: 16,
     color: '#666',
     textAlign: 'center',
     marginTop: 40,
   },
-  checkout: {
+  footer: {
+    borderTopWidth: 1,
+    borderTopColor: '#E3E3E3',
+    paddingVertical: 14,
+  },
+  total: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 8,
-    marginBottom: 24,
     textAlign: 'right',
+    marginBottom: 12,
+  },
+  button: {
+    backgroundColor: '#70B529',
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
