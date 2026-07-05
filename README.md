@@ -21,6 +21,7 @@ with cart state shared across screens via React Context.
 - Cart **badge** with the item count; product icons for a store-like feel
 - Shared cart state via **React Context** (single source of truth)
 - Screens: Login → Shop → Cart → Checkout (React Navigation stack)
+- **Unit-tested** cart logic (Jest) — pure functions kept separate from the UI
 
 ## Tech
 
@@ -40,6 +41,12 @@ npx expo start        # scan the QR code with the Expo Go app
 ```bash
 npm install
 npx expo start --web
+```
+
+**Run the tests:**
+
+```bash
+npm test        # Jest — unit tests for the cart logic (src/lib/cart.js)
 ```
 
 ## Notes
