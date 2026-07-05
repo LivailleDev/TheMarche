@@ -1,10 +1,16 @@
 # The Marché — Shopping Cart App
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-online-brightgreen)](https://themarcheapp.netlify.app)
+![React Native](https://img.shields.io/badge/React%20Native-Expo-000020)
+![React](https://img.shields.io/badge/React-18-61DAFB)
+
 A small **mobile shopping-cart app** built with **React Native (Expo)**. Browse a
 product list, add items to the cart, adjust quantities, and see the running total —
 with cart state shared across screens via React Context.
 
-<!-- LIVE_DEMO -->
+**🔗 Live demo:** https://themarcheapp.netlify.app *(web build of the React Native app, via react-native-web)*
+
+![The Marché](docs/screenshot.png)
 
 ## Features
 
