@@ -1,81 +1,72 @@
-import { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
+// Presentational only — the quantity comes from the cart context (single source
+// of truth), so it always stays in sync.
 export default function CardItem({ data, addAmount, removeAmount }) {
-   const [amount, setAmount] = useState(data?.amount)
+  return (
+    <View style={styles.container}>
+      <View>
+        <Text style={styles.title}>{data.name}</Text>
+        <Text style={styles.price}>€ {data.price.toFixed(2)}</Text>
+      </View>
 
-   function handleIncrease(){
-     addAmount();
-     setAmount(item => item + 1)
-   }
+      <View style={styles.amountContainer}>
+        <TouchableOpacity style={styles.button} onPress={removeAmount}>
+          <Text style={styles.buttonText}>−</Text>
+        </TouchableOpacity>
 
-   function handleDecrease(){
-      removeAmount();
+        <Text style={styles.amount}>{data.amount}</Text>
 
-      if(amount === 0){
-       setAmount(0);
-       return;
-      }
-
-      setAmount(item => item -1)
-   }
- 
-return (
-   <View style={styles.container}>
-    <View>
-      <Text style={styles.title}>{data.name}</Text>
-      <Text style={styles.price}>€ {data.price}</Text>
+        <TouchableOpacity style={styles.button} onPress={addAmount}>
+          <Text style={styles.buttonText}>+</Text>
+        </TouchableOpacity>
+      </View>
     </View>
-
-    <View style={styles.amountContainer}>
-      <TouchableOpacity style={styles.buttonAdd} onPress={handleDecrease}>
-         <Text>-</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.amount}>{amount}</Text>
-
-      <TouchableOpacity style={styles.buttonAdd} onPress={handleIncrease}>
-        <Text>+</Text>
-       </TouchableOpacity>
-   </View>
-
-  </View>
-
- );
+  );
 }
 
 const styles = StyleSheet.create({
-   container: {
-      borderWidth: 1,
-      borderColor: '#DFDFDF',
-      borderRadius: 2,
-      marginBottom: 14,
-      padding: 8,
-      backgroundColor: "#FFFFFF"
-   },
-   title: {
-      fontWeight: 'bold',
-      fontSize: 18,
-   },
-   price: {
-      fontSize: 16,
-   },
-   amountContainer: {
-      marginTop: 14,
-      marginBottom: 14,
-      flexDirection: 'row',
-      alignItems: 'center',
-   },
-   buttonAdd: {
-      backgroundColor: "#77B928",
-      padding: 6,
-      paddingLeft: 14,
-      paddingRight: 14,
-      borderRadius: 4,
-   },
-   amount: {
-      marginLeft: 14,
-      marginRight: 14,
-   },
-})
-
+  container: {
+    borderWidth: 1,
+    borderColor: '#E3E3E3',
+    borderRadius: 8,
+    marginBottom: 12,
+    padding: 12,
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  price: {
+    fontSize: 14,
+    color: '#555',
+    marginTop: 2,
+  },
+  amountContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  button: {
+    backgroundColor: '#77B928',
+    width: 34,
+    height: 34,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  amount: {
+    marginHorizontal: 16,
+    fontSize: 16,
+    minWidth: 16,
+    textAlign: 'center',
+  },
+});
